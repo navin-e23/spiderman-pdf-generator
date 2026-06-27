@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spider-Man Hero Card Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --spidey-red:   #C0392B;
+      --dark-red:     #922B21;
+      --spidey-blue:  #1A3A6B;
+      --dark-blue:    #0D2137;
+      --web-gold:     #F39C12;
+      --white:        #FFFFFF;
+      --light:        #ECF0F1;
+      --gray:         #8899AA;
+      --panel:        #0D1B2A;
+    }
+
+    body {
+      background: var(--dark-blue);
+      color: var(--white);
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── WEB BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 80% 20%, rgba(192,57,43,0.12) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(26,58,107,0.2) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .spider-icon {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 8px;
+      animation: swing 3s ease-in-out infinite;
+      transform-origin: top center;
+    }
+    @keyframes swing {
+      0%, 100% { transform: rotate(-8deg); }
+      50%       { transform: rotate(8deg); }
+    }
+
+    .title {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(2.4rem, 8vw, 4rem);
+      letter-spacing: 4px;
+      color: var(--spidey-red);
+      text-shadow: 3px 3px 0 var(--dark-red), 0 0 30px rgba(192,57,43,0.4);
+      line-height: 1;
+    }
+
+    .subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--web-gold);
+      letter-spacing: 3px;
+      margin-top: 8px;
+      text-transform: uppercase;
+    }
+
+    /* ── CARD FORM ── */
+    .card {
+      background: var(--panel);
+      border: 1.5px solid var(--spidey-red);
+      border-radius: 8px;
+      padding: 36px 32px;
+      box-shadow: 0 0 40px rgba(192,57,43,0.15), 0 20px 60px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Corner web decoration */
+    .card::before {
+      content: '🕸';
+      position: absolute;
+      top: -4px;
+      right: 8px;
+      font-size: 3.5rem;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    .section-title {
+      font-family: 'Bangers', cursive;
+      font-size: 1.1rem;
+      letter-spacing: 3px;
+      color: var(--web-gold);
+      margin: 28px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--web-gold), transparent);
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .field-grid .full { grid-column: 1 / -1; }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gray);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    input, textarea {
+      background: #091525;
+      border: 1px solid #2A3A50;
+      border-radius: 4px;
+      color: var(--white);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--spidey-red);
+      box-shadow: 0 0 0 3px rgba(192,57,43,0.15);
+    }
+    input::placeholder, textarea::placeholder {
+      color: #3A4A5A;
+      font-weight: 400;
+    }
+    textarea { resize: vertical; min-height: 70px; }
+
+    /* Stat sliders */
+    .stat-field { display: flex; flex-direction: column; gap: 6px; }
+    .stat-header { display: flex; justify-content: space-between; align-items: center; }
+    .stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gray);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .stat-val {
+      font-family: 'Bangers', cursive;
+      font-size: 1.2rem;
+      color: var(--web-gold);
+      letter-spacing: 1px;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      height: 20px;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      background: #1A2A3A;
+      height: 6px;
+      border-radius: 3px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      background: var(--spidey-red);
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      margin-top: -6px;
+      cursor: pointer;
+      border: 2px solid var(--web-gold);
+    }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      margin-top: 32px;
+      background: var(--spidey-red);
+      border: none;
+      border-radius: 6px;
+      color: var(--white);
+      cursor: pointer;
+      font-family: 'Bangers', cursive;
+      font-size: 1.5rem;
+      letter-spacing: 4px;
+      padding: 16px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(192,57,43,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .submit-btn:hover {
+      background: var(--dark-red);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(192,57,43,0.5);
+    }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn.loading { opacity: 0.7; pointer-events: none; }
+
+    /* Status message */
+    .status {
+      margin-top: 16px;
+      text-align: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--web-gold);
+      letter-spacing: 1px;
+      min-height: 20px;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: #2A3A50;
+      letter-spacing: 1px;
+    }
+    .footer span { color: var(--spidey-red); }
+
+    @media (max-width: 480px) {
+      .field-grid { grid-template-columns: 1fr; }
+      .card { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <span class="spider-icon">🕷️</span>
+    <h1 class="title">HERO CARD GENERATOR</h1>
+    <p class="subtitle">Spider-Man · Official ID System · S.H.I.E.L.D Classified</p>
+  </div>
+
+  <!-- Form -->
+  <div class="card">
+    <form id="heroForm">
+
+      <div class="section-title">🦸 HERO IDENTITY</div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="Peter Parker" required maxlength="50"/>
+        </div>
+        <div class="field">
+          <label for="alias">Hero Alias</label>
+          <input type="text" id="alias" name="alias" placeholder="Your Friendly Neighbour..." maxlength="60"/>
+        </div>
+        <div class="field">
+          <label for="city">City / Base of Operations</label>
+          <input type="text" id="city" name="city" placeholder="New York" maxlength="40"/>
+        </div>
+        <div class="field">
+          <label for="power">Primary Superpower</label>
+          <input type="text" id="power" name="power" placeholder="Spider-Sense" maxlength="50"/>
+        </div>
+        <div class="field full">
+          <label for="quote">Your Hero Quote</label>
+          <textarea id="quote" name="quote" placeholder="With great power comes great responsibility." maxlength="200"></textarea>
+        </div>
+      </div>
+
+      <div class="section-title">⚡ HERO STATS</div>
+      <div class="field-grid">
+        <div class="stat-field">
+          <div class="stat-header">
+            <span class="stat-label">Strength</span>
+            <span class="stat-val" id="strengthVal">85</span>
+          </div>
+          <input type="range" id="strength" name="strength" min="1" max="100" value="85"
+            oninput="document.getElementById('strengthVal').textContent=this.value"/>
+        </div>
+        <div class="stat-field">
+          <div class="stat-header">
+            <span class="stat-label">Agility</span>
+            <span class="stat-val" id="agilityVal">95</span>
+          </div>
+          <input type="range" id="agility" name="agility" min="1" max="100" value="95"
+            oninput="document.getElementById('agilityVal').textContent=this.value"/>
+        </div>
+        <div class="stat-field">
+          <div class="stat-header">
+            <span class="stat-label">Intelligence</span>
+            <span class="stat-val" id="intelligenceVal">90</span>
+          </div>
+          <input type="range" id="intelligence" name="intelligence" min="1" max="100" value="90"
+            oninput="document.getElementById('intelligenceVal').textContent=this.value"/>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span>🕸</span>
+        <span>GENERATE HERO CARD PDF</span>
+        <span>🕸</span>
+      </button>
+
+    </form>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="footer">
+    Powered by Python · ReportLab · Flask &nbsp;|&nbsp;
+    <span>© Spider-Man PDF Generator</span>
+  </div>
+</div>
+
+<script>
+  const form   = document.getElementById("heroForm");
+  const btn    = document.getElementById("submitBtn");
+  const status = document.getElementById("status");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    btn.classList.add("loading");
+    btn.querySelector("span:nth-child(2)").textContent = "GENERATING...";
+    status.textContent = "🦇 Accessing S.H.I.E.L.D. database...";
+
+    try {
+      const formData = new FormData(form);
+      const res = await fetch("/generate", { method: "POST", body: formData });
+
+      if (!res.ok) throw new Error("Server error");
+
+      const blob = await res.blob();
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement("a");
+      a.href     = url;
+      a.download = `hero_card_${formData.get("name").replace(/\s+/g,"_")}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      status.textContent = "✅ Hero Card downloaded! With great power comes great responsibility.";
+    } catch (err) {
+      status.textContent = "❌ Something went wrong. Even Spider-Man has bad days.";
+    } finally {
+      btn.classList.remove("loading");
+      btn.querySelector("span:nth-child(2)").textContent = "GENERATE HERO CARD PDF";
+    }
+  });
+</script>
+</body>
+</html>
